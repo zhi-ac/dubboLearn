@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--声明服务提供者的名称，保证它的唯一性，它是dubbo内部使用的唯一标识 一般使用项目名称-->
+    <dubbo:application name="008-multi-zk-provider"/>
+
+    <!--
+    设置协议和端口号
+    name 协议   官方推荐dubbo
+    port 端口号  默认端口20880
+    -->
+    <dubbo:protocol name="dubbo" port="20880"/>
+    <!--指定Zookeeper注册中心-->
+    <dubbo:registry address="zookeeper://localhost:2181"/>
+    <!--
+    暴露服务
+        interface：接口的全限定类名
+        ref 引用接口在spring容器中的唯一标识
+        version 版本号 一个接口可能对应多个实现类 以版本号来区分
+    -->
+    <dubbo:service interface="com.sheng.dubbo.service.SomeService" ref="someServiceImpl" version="1.0"/>
+
+    <dubbo:service interface="com.sheng.dubbo.service.SomeService" ref="newSomeServiceImpl" version="2.0"/>
+    <!--
+    加载接口实现类
+        id 就是接口实现类的唯一标识
+    -->
+    <bean id="someServiceImpl" class="com.sheng.dubbo.service.impl.SomeServiceImpl"/>
+    <bean id="newSomeServiceImpl" class="com.sheng.dubbo.service.impl.NewSomeServiceImpl"/>
+</beans>
